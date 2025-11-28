@@ -20,7 +20,14 @@ namespace PhotoOrderCalculator
         private void InitializeComponent()
         {
             Text = "Ваш заказ";
-            Size = new Size(820, 900);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoScaleDimensions = new SizeF(96F, 96F);
+
+            var workingArea = Screen.FromPoint(Cursor.Position).WorkingArea;
+            int formWidth = Math.Max(640, Math.Min(820, workingArea.Width - 40));
+            int formHeight = Math.Max(760, Math.Min(900, workingArea.Height - 60));
+
+            Size = new Size(formWidth, formHeight);
             StartPosition = FormStartPosition.CenterScreen;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
@@ -88,7 +95,7 @@ namespace PhotoOrderCalculator
             {
                 BorderStyle = BorderStyle.Fixed3D,
                 Location = new Point(20, y),
-                Size = new Size(760, 2)
+                Size = new Size(ClientSize.Width - 40, 2)
             };
             Controls.Add(separator1);
             y += 20;
@@ -132,7 +139,7 @@ namespace PhotoOrderCalculator
             {
                 BorderStyle = BorderStyle.Fixed3D,
                 Location = new Point(20, y),
-                Size = new Size(760, 2)
+                Size = new Size(ClientSize.Width - 40, 2)
             };
             Controls.Add(separator2);
             y += 20;
@@ -149,10 +156,15 @@ namespace PhotoOrderCalculator
             y += 36;
 
             // Таблица позиций
+            int gridWidth = ClientSize.Width - 40;
+            int desiredGridHeight = Math.Min(220, _order.Positions.Count * 38 + 40);
+            int availableGridHeight = Math.Max(140, ClientSize.Height - y - 180); // оставляем место под кнопку и отступы
+            int gridHeight = Math.Min(desiredGridHeight, availableGridHeight);
+
             var grid = new DataGridView
             {
                 Location = new Point(20, y),
-                Size = new Size(760, Math.Min(220, _order.Positions.Count * 38 + 40)),
+                Size = new Size(gridWidth, gridHeight),
                 AllowUserToAddRows = false,
                 AllowUserToDeleteRows = false,
                 ReadOnly = true,
@@ -178,19 +190,22 @@ namespace PhotoOrderCalculator
             {
                 Name = "Position",
                 HeaderText = "Позиция",
-                Width = 160
+                Width = Math.Max(140, gridWidth / 4)
             });
+            int remainingAfterPosition = gridWidth - grid.Columns[0].Width;
+            int countWidth = Math.Max(180, remainingAfterPosition / 2);
             grid.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Count",
                 HeaderText = "Количество фото",
-                Width = 260
+                Width = countWidth
             });
+            int priceWidth = Math.Max(160, gridWidth - grid.Columns[0].Width - countWidth);
             grid.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Total",
                 HeaderText = "Стоимость",
-                Width = 260
+                Width = priceWidth
             });
 
             foreach (var pos in _order.Positions)
@@ -219,7 +234,11 @@ namespace PhotoOrderCalculator
             Controls.Add(btnClose);
 
             // Подгоняем высоту формы
-            ClientSize = new Size(ClientSize.Width, y + 80);
+            int requiredHeight = y + 80;
+            if (requiredHeight < ClientSize.Height)
+            {
+                ClientSize = new Size(ClientSize.Width, requiredHeight);
+            }
         }
     }
 }

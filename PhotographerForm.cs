@@ -27,17 +27,28 @@ namespace PhotoOrderCalculator
         private void InitializeComponent()
         {
             Text = "Заказ фотографий";
-            Size = new Size(540, 620);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoScaleDimensions = new SizeF(96F, 96F);
+
+            var workingArea = Screen.FromPoint(Cursor.Position).WorkingArea;
+            int formWidth = Math.Max(520, Math.Min(640, workingArea.Width - 40));
+            int formHeight = Math.Max(600, Math.Min(700, workingArea.Height - 40));
+
+            Size = new Size(formWidth, formHeight);
             StartPosition = FormStartPosition.CenterScreen;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             KeyPreview = true;
             
             // Таблица позиций
+            int gridWidth = ClientSize.Width - 40;
+            int availableHeight = ClientSize.Height - 200; // оставляем место под панель и кнопки
+            int gridHeight = Math.Max(220, Math.Min(360, availableHeight - 160));
+
             _grid = new DataGridView
             {
                 Location = new Point(20, 20),
-                Size = new Size(500, 330),
+                Size = new Size(gridWidth, gridHeight),
                 AllowUserToAddRows = false,
                 AllowUserToDeleteRows = false,
                 AllowUserToResizeRows = false,
@@ -57,7 +68,7 @@ namespace PhotoOrderCalculator
             {
                 Name = "Position",
                 HeaderText = "№",
-                Width = 70,
+                Width = Math.Max(70, gridWidth / 6),
                 ReadOnly = true,
                 SortMode = DataGridViewColumnSortMode.NotSortable
             };
@@ -69,7 +80,7 @@ namespace PhotoOrderCalculator
             {
                 Name = "Count",
                 HeaderText = "Количество фото",
-                Width = 410,
+                Width = Math.Max(180, gridWidth - colPosition.Width - 20),
                 SortMode = DataGridViewColumnSortMode.NotSortable
             };
             colCount.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -84,8 +95,8 @@ namespace PhotoOrderCalculator
             // Панель итогов
             var panelTotals = new Panel
             {
-                Location = new Point(20, 370),
-                Size = new Size(500, 100),
+                Location = new Point(20, 20 + gridHeight + 20),
+                Size = new Size(gridWidth, 100),
                 BorderStyle = BorderStyle.FixedSingle
             };
 
@@ -111,7 +122,7 @@ namespace PhotoOrderCalculator
             // Кнопки
             _btnAddPosition = new Button
             {
-                Location = new Point(20, 500),
+                Location = new Point(20, panelTotals.Bottom + 20),
                 Size = new Size(160, 44),
                 Text = "Добавить позицию",
                 Font = new Font("Segoe UI", 11, FontStyle.Bold),
@@ -121,7 +132,7 @@ namespace PhotoOrderCalculator
 
             _btnOk = new Button
             {
-                Location = new Point(190, 500),
+                Location = new Point(190, panelTotals.Bottom + 20),
                 Size = new Size(170, 44),
                 Text = "Показать клиенту",
                 Font = new Font("Segoe UI", 11, FontStyle.Bold),
@@ -134,7 +145,7 @@ namespace PhotoOrderCalculator
 
             _btnCancel = new Button
             {
-                Location = new Point(370, 500),
+                Location = new Point(370, panelTotals.Bottom + 20),
                 Size = new Size(150, 44),
                 Text = "Очистить",
                 Font = new Font("Segoe UI", 11, FontStyle.Bold),
