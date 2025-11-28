@@ -232,7 +232,7 @@ namespace PhotoOrderCalculator
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (keyData == Keys.Tab && (_grid.Focused || _grid.IsCurrentCellInEditMode))
+            if (keyData == Keys.Tab || keyData == Keys.Enter && (_grid.Focused || _grid.IsCurrentCellInEditMode))
             {
                 _grid.EndEdit();
                 
