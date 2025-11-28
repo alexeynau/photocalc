@@ -382,17 +382,17 @@ namespace PhotoOrderCalculator
             _lblTotalAmount.Text = $"Сумма: {totalAmount:N0} ₽";
         }
 
-        protected override void OnShown(EventArgs e)
-        {
-            base.OnShown(e);
+        // protected override void OnShown(EventArgs e)
+        // {
+        //     base.OnShown(e);
             
-            // При показе формы - фокус на поле ввода
-            _grid.Focus();
-            if (_grid.Rows.Count > 0)
-            {
-                _grid.CurrentCell = _grid.Rows[0].Cells["Count"];
-                _grid.BeginEdit(true);
-            }
-        }
+        //     // При показе формы - фокус на поле ввода
+        //     _grid.Focus();
+        //     if (_grid.Rows.Count > 0)
+        //     {
+        //         _grid.CurrentCell = _grid.Rows[0].Cells["Count"];
+        //         _grid.BeginEdit(true);
+        //     }
+        // }
     }
 }

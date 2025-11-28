@@ -64,9 +64,8 @@ namespace PhotoOrderCalculator
             string[] instructions = new[]
             {
                 "• Вашу фамилию и имя",
-                "• Контактный телефон и/или e-mail",
-                "• Количество выбранных фотографий",
-                $"• Номер заказа: {_order.Id}"
+                "• Контактный телефон И e-mail",
+                "• Количество выбранных фотографий"
             };
 
             foreach (var instruction in instructions)
@@ -162,7 +161,9 @@ namespace PhotoOrderCalculator
                 BackgroundColor = Color.White,
                 BorderStyle = BorderStyle.FixedSingle,
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None,
+                AllowUserToResizeColumns = false,
+                AllowUserToResizeRows = false
             };
 
             grid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(70, 130, 180);
@@ -177,19 +178,19 @@ namespace PhotoOrderCalculator
             {
                 Name = "Position",
                 HeaderText = "Позиция",
-                FillWeight = 25
+                Width = 160
             });
             grid.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Count",
                 HeaderText = "Количество фото",
-                FillWeight = 35
+                Width = 260
             });
             grid.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Total",
                 HeaderText = "Стоимость",
-                FillWeight = 40
+                Width = 260
             });
 
             foreach (var pos in _order.Positions)
